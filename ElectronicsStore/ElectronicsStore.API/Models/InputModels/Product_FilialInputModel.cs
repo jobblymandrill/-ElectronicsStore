@@ -1,7 +1,6 @@
-﻿
-namespace ElecronicsStore.DB.Models.DataModels
+﻿namespace ElectronicsStore.API.Models.InputModels
 {
-    public class Product_Filial
+    public class Product_FilialInputModel
     {
         public int Id { get; set; }
         public int ProductId { get; set; }

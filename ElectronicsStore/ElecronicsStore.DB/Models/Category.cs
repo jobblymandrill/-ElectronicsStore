@@ -1,16 +1,16 @@
 ﻿using System;
 
-namespace ElectronicsStore.API.Models.InputModels
+namespace ElecronicsStore.DB.Models
 {
-    public class CategoryInputModel
+    public class Category
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public int? SubcategoryId { get; set; }
 
         public object Clone()
         {
-            return new CategoryInputModel()
+            return new Category()
             {
                 Id = this.Id,
                 Name = this.Name,
@@ -20,7 +20,7 @@ namespace ElectronicsStore.API.Models.InputModels
 
         public override bool Equals(object obj)
         {
-            return obj is CategoryInputModel categoryInputModel &&
+            return obj is Category categoryInputModel &&
                    Id == categoryInputModel.Id &&
                    Name == categoryInputModel.Name &&
                    SubcategoryId == categoryInputModel.SubcategoryId;

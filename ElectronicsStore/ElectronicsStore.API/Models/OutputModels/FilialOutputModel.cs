@@ -1,14 +1,12 @@
-﻿using ElectronicsStore.API.Models.OutputModels.Components;
-using System.Collections.Generic;
+﻿using ElecronicsStore.DB.Models;
 
 namespace ElectronicsStore.API.Models.OutputModels
 {
     public class FilialOutputModel
     {
-        public int Id { get; set; }
-        public string City { get; set; }
-        public string Adress { get; set; }
-        public string Phone { get; set; }
-        public List<ProductsWithAmountOutputModel> AvailiableProducts { get; set; }
+         public int Id { get; set; }
+        public int Name { get; set; }
+        public Country Country { get; set; }
+        public bool IsForeign { get; set; }
     }
 }

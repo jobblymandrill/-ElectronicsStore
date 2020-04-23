@@ -1,13 +1,12 @@
-﻿using ElectronicsStore.API.Models.InputModels.Components;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace ElectronicsStore.API.Models.InputModels
 {
     public class OrderInputModel
     {
-        public List<ProductsWithAmountInputModel> Products { get; set; }
-        public CustomerInputModel Customer { get; set; } 
+        public long? Id { get; set; }
         public string DateTime { get; set; }
-        public string FilialName { get; set; }
+        public int FilialId { get; set; }
+        public List<Order_Product_AmountInputModel> Products { get; set; }
     }
 }

@@ -1,13 +1,11 @@
-﻿using ElecronicsStore.DB.Models;
-
-namespace ElectronicsStore.API.Models.OutputModels
+﻿namespace ElecronicsStore.DB.Models
 {
-    public class ProductOutputModel
+    public class Product
     {
         public long Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string TradeMark { get; set; }
-        public CategoryOutputModel Category { get; set; }
+        public Category Category { get; set; }
     }
 }

@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public SubcategoryOutputModel Subcategory { get; set; }
+        public int? SubcategoryId { get; set; }
     }
 }
