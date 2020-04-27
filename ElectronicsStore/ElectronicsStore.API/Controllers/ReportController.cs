@@ -64,11 +64,11 @@ namespace ElectronicsStore.API.Controllers
             return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
         }
 
-        [HttpGet("product/most-popular-in-each-city")]
-        public List<City_ProductOutputModel> GetMostPopularProductInEachCity()
-        {
-            return new List<City_ProductOutputModel>();
-        }
+        //[HttpGet("product/most-popular-in-each-city")]
+        //public async ValueTask<ActionResult<List<ProductWithCityOutputModel>>> GetMostPopularProductInEachCity()
+        //{
+        //    var result = await _reportRepository.GetMostPopularProductInEachCity();
+        //}
 
         [HttpGet("product/never-ordered")]//works
         public async ValueTask<ActionResult<List<ProductOutputModel>>> GetNeverOrderedProducts()
