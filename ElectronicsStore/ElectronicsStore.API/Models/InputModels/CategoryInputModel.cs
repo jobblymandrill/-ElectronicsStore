@@ -4,7 +4,7 @@ namespace ElectronicsStore.API.Models.InputModels
 {
     public class CategoryInputModel
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public int? SubcategoryId { get; set; }
 

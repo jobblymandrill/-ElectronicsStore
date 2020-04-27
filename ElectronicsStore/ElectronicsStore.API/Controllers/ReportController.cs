@@ -1,39 +1,85 @@
-﻿using ElectronicsStore.API.Models.OutputModels;
+﻿using AutoMapper;
+using ElectronicsStore.API.Models.OutputModels;
+using ElectronicsStore.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ElectronicsStore.API.Controllers
 {
-    public class ReportController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ReportController : ControllerBase, IReportController
     {
-        [HttpGet("category/with-more-than-{number}-products")]
-        public List<CategoryOutputModel> GetCategoriesWithACertainProductNumber(int number)
+        private readonly IMapper _mapper;
+        private readonly IReportRepository _reportRepository;
+        public ReportController(IReportRepository reportRepository, IMapper mapper)
         {
-            return new List<CategoryOutputModel>();
+            _reportRepository = reportRepository;
+            _mapper = mapper;
         }
 
-        [HttpGet("product/from-store-not-present-in-msc-and-spb")]
-        public List<ProductOutputModel> GetProductsFromStoreNotPresentInMscAndSpb()
+        [HttpGet("category/with-more-than-{number}-products")]//works but sql procedure need to be refactored
+        public async ValueTask<ActionResult<List<CategoryWithNumberOutputModel>>> GetCategoriesWithACertainProductNumber(int number)
         {
-            return new List<ProductOutputModel>();
+            var result = await _reportRepository.GetCategoriesWithACertainProductNumber(number);
+            if (result.IsOkay)
+            {
+                if (result.RequestData == null)
+                {
+                    return Problem($"There is no categories with this number of products.", statusCode: 520);
+                }
+                return Ok(_mapper.Map<List<CategoryWithNumberOutputModel>>(result.RequestData));
+            }
+            return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
+        }
+
+        [HttpGet("product/from-warehouse-not-present-in-msc-and-spb")]
+        public async ValueTask<ActionResult<List<ProductOutputModel>>> GetProductsFromWareHouseNotPresentInMscAndSpb()//works
+        {
+            var result = await _reportRepository.GetProductsFromWareHouseNotPresentInMscAndSpb();
+            if (result.IsOkay)
+            {
+                if (result.RequestData == null)
+                {
+                    return Problem($"There is no products from warehouse not present in Msc and Spb.", statusCode: 520);
+                }
+                return Ok(_mapper.Map<List<ProductOutputModel>>(result.RequestData));
+            }
+            return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
         }
 
         [HttpGet("product/finished")]
-        public List<ProductOutputModel> GetRanOutProducts()
+        public async ValueTask<ActionResult<List<ProductOutputModel>>> GetRanOutProducts()//works
         {
-            return new List<ProductOutputModel>();
+            var result = await _reportRepository.GetRanOutProducts();
+            if (result.IsOkay)
+            {
+                if (result.RequestData == null)
+                {
+                    return Problem($"There is no ran out products.", statusCode: 520);
+                }
+                return Ok(_mapper.Map<List<ProductOutputModel>>(result.RequestData));
+            }
+            return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
         }
 
-        //[HttpGet("product/most-popular-in-each-city")]
-        //public List<City_ProductOutputModel> GetMostPopularProductInEachCity()
-        //{
-        //    return new List<City_ProductOutputModel>();
-        //}
-
-        [HttpGet("product/never-ordered")]
-        public List<ProductOutputModel> GetNeverOrderedProducts()
+        [HttpGet("product/most-popular-in-each-city")]
+        public List<City_ProductOutputModel> GetMostPopularProductInEachCity()
         {
-            return new List<ProductOutputModel>();
+            return new List<City_ProductOutputModel>();
+        }
+
+        [HttpGet("product/never-ordered")]//works
+        public async ValueTask<ActionResult<List<ProductOutputModel>>> GetNeverOrderedProducts()
+        {
+            var result = await _reportRepository.GetNeverOrderedProducts();
+            if (result.IsOkay)
+            {
+                if (result.RequestData == null) { return Problem($"List of never ordered products is empty.", statusCode: 520); }
+                return Ok(_mapper.Map<List<ProductOutputModel>>(result.RequestData));
+            }
+            return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
         }
 
         //[HttpGet("income/from-russia-and-foreign-countries")]
@@ -48,10 +94,10 @@ namespace ElectronicsStore.API.Controllers
         //    return new List<IncomeOutputModel>();
         //}
 
-        [HttpGet("income/of-filial-during-period")]
-        public decimal GetIncomeOfFilialDuringPeriod(string startDate, string finishDate, string name)
-        {
-            return 10000000;
-        }
+        //[HttpGet("income/of-filial-during-period")]
+        //public decimal GetIncomeOfFilialDuringPeriod(string startDate, string finishDate, string name)
+        //{
+        //    return 10000000;
+        //}
     }
 }

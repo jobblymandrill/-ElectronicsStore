@@ -1,0 +1,4 @@
+﻿{
+  "DBConnectionString": "Data Source = RITTER; Initial Catalog=ShopDB;Integrated Security = True",
+  "isProduction": "true"
+}
