@@ -13,5 +13,9 @@ namespace ElecronicsStore.DB.Storages
         ValueTask<List<CategoryWithNumber>> GetCategoriesWithACertainProductNumber(int number);
         ValueTask<List<Product>> GetProductsFromWareHouseNotPresentInMscAndSpb();
         ValueTask<List<Product>> GetRanOutProducts();
+        ValueTask<List<ProductWithCity>> GetMostPopularProductInEachCity();
+        ValueTask<List<FilialWithIncome>> GetTotalFilialSumPerPeriod(Period dataModel);
+        ValueTask<IncomeByIsForeignCriteria> GetIncomeFromRussiaAndFromForeignCountries();
+        ValueTask<List<FilialWithIncome>> GetIncomeFromEachFilial();
     }
 }

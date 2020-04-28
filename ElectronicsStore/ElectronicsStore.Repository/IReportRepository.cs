@@ -10,5 +10,9 @@ namespace ElectronicsStore.Repository
         ValueTask<RequestResult<List<CategoryWithNumber>>> GetCategoriesWithACertainProductNumber(int number);
         ValueTask<RequestResult<List<Product>>> GetProductsFromWareHouseNotPresentInMscAndSpb();
         ValueTask<RequestResult<List<Product>>> GetRanOutProducts();
+        ValueTask<RequestResult<List<ProductWithCity>>> GetMostPopularProductInEachCity();
+        ValueTask<RequestResult<List<FilialWithIncome>>> GetTotalFilialSumPerPeriod(Period filialNameWithPeriodDataModel);
+        ValueTask<RequestResult<IncomeByIsForeignCriteria>> GetIncomeFromRussiaAndFromForeignCountries();
+        ValueTask<RequestResult<List<FilialWithIncome>>> GetIncomeFromEachFilial();
     }
 }

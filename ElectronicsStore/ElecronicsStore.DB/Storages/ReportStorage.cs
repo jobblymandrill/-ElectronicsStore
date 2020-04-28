@@ -45,6 +45,10 @@ namespace ElecronicsStore.DB.Storages
             public const string ShowCategoriesWhereProductNumberIsMoreThanSomeNumber = "ShowCategoriesWhereProductNumberIsMoreThanSomeNumber";
             public const string GetProductsFromWareHouseNotPresentInMscAndSpb = "FindProductsOnTheLagetButNotInMSCAndSpb";
             public const string GetRanOutProducts = "FindProductsSoldButNotPresent";
+            public const string GetMostPopularProductInEachCity = "FindTheMostPopularProductInEachCity";
+            public const string GetTotalFilialSumPerPeriod = "TotalFilialSumPerPeriod";
+            public const string GetIncomeFromRussiaAndFromForeignCountries = "FindOutcomeFromRussiaAndFromNotRussia";
+            public const string GetIncomeFromEachFilial = "MoneyByFilial";
         }
 
         public async ValueTask<List<Product>> GetNeverOrderedProducts()//works
@@ -124,6 +128,63 @@ namespace ElecronicsStore.DB.Storages
                             transaction: _transaction,
                             commandType: CommandType.StoredProcedure,
                             splitOn: "Id, Id, Id");
+            return result.ToList();
+        }
+
+        public async ValueTask<List<ProductWithCity>> GetMostPopularProductInEachCity()
+        {
+            var result = await _connection.QueryAsync<ProductWithCity, Product, Category, Category, ProductWithCity>(
+                            SpName.GetMostPopularProductInEachCity,
+                            (productWithCity, product, category, parentCategory) =>
+                            {
+                                ProductWithCity newProductWithCity = productWithCity;
+                                Product newProduct = product;
+                                Category newCategory = category;
+                                Category newParentCategory = parentCategory;
+                                newCategory.ParentCategory = newParentCategory;
+                                newProduct.Category = newCategory;
+                                newProductWithCity.Product = newProduct;
+                                return newProductWithCity;
+                            },
+                            null,
+                            transaction: _transaction,
+                            commandType: CommandType.StoredProcedure,
+                            splitOn: "Id, Id, Id");
+            return result.ToList();
+        }
+
+        public async ValueTask<List<FilialWithIncome>> GetTotalFilialSumPerPeriod(Period dataModel)
+        {
+            DynamicParameters periodModelParams = new DynamicParameters(new
+            {
+                dataModel.Start,
+                dataModel.End,
+            });
+            var result = await _connection.QueryAsync<FilialWithIncome>(
+                            SpName.GetTotalFilialSumPerPeriod,
+                            periodModelParams,
+                            transaction: _transaction,
+                            commandType: CommandType.StoredProcedure);
+            return result.ToList();
+        }
+
+        public async ValueTask<IncomeByIsForeignCriteria> GetIncomeFromRussiaAndFromForeignCountries()
+        {
+            var result = await _connection.QueryAsync<IncomeByIsForeignCriteria>(
+                           SpName.GetIncomeFromRussiaAndFromForeignCountries,
+                           null,
+                           transaction: _transaction,
+                           commandType: CommandType.StoredProcedure);
+            return result.FirstOrDefault();
+        }
+
+        public async ValueTask<List<FilialWithIncome>> GetIncomeFromEachFilial()
+        {
+            var result = await _connection.QueryAsync<FilialWithIncome>(
+                           SpName.GetIncomeFromEachFilial,
+                           null,
+                           transaction: _transaction,
+                           commandType: CommandType.StoredProcedure);
             return result.ToList();
         }
     }

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using ElecronicsStore.DB.Models;
+using ElectronicsStore.API.Models.InputModels;
 using ElectronicsStore.API.Models.OutputModels;
 using ElectronicsStore.Repository;
 using Microsoft.AspNetCore.Mvc;
@@ -64,11 +66,20 @@ namespace ElectronicsStore.API.Controllers
             return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
         }
 
-        //[HttpGet("product/most-popular-in-each-city")]
-        //public async ValueTask<ActionResult<List<ProductWithCityOutputModel>>> GetMostPopularProductInEachCity()
-        //{
-        //    var result = await _reportRepository.GetMostPopularProductInEachCity();
-        //}
+        [HttpGet("product/most-popular-in-each-city")]
+        public async ValueTask<ActionResult<List<ProductWithCityOutputModel>>> GetMostPopularProductInEachCity()//doesnt work, i dont know how to modify sql proc
+        {
+            var result = await _reportRepository.GetMostPopularProductInEachCity();
+            if (result.IsOkay)
+            {
+                if (result.RequestData == null)
+                {
+                    return Problem($"Sorry, there is no information about most popular products.", statusCode: 520);
+                }
+                return Ok(_mapper.Map<List<ProductWithCityOutputModel>>(result.RequestData));
+            }
+            return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
+        }
 
         [HttpGet("product/never-ordered")]//works
         public async ValueTask<ActionResult<List<ProductOutputModel>>> GetNeverOrderedProducts()
@@ -82,22 +93,40 @@ namespace ElectronicsStore.API.Controllers
             return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
         }
 
-        //[HttpGet("income/from-russia-and-foreign-countries")]
-        //public List<IncomeOutputModel> GetIncomeFromRussiaAndFromForeignCountries()
-        //{
-        //    return new List<IncomeOutputModel>();
-        //}
+        [HttpGet("income/from-russia-and-foreign-countries")]
+        public async ValueTask<ActionResult<IncomeByIsForeignCriteriaOutputModel>> GetIncomeFromRussiaAndFromForeignCountries()//works
+        {
+            var result = await _reportRepository.GetIncomeFromRussiaAndFromForeignCountries();
+            if (result.IsOkay)
+            {
+                if (result.RequestData == null) { return Problem($"Sorry, there is no information about income from Russia and from other countries.", statusCode: 520); }
+                return Ok(_mapper.Map<IncomeByIsForeignCriteriaOutputModel>(result.RequestData));
+            }
+            return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
+        }
 
-        //[HttpGet("income/from-each-filial")]
-        //public List<IncomeOutputModel> GetIncomeFromEachFilial()
-        //{
-        //    return new List<IncomeOutputModel>();
-        //}
+        [HttpGet("income/from-each-filial")]
+        public async ValueTask<ActionResult<List<FilialWithIncomeOutputModel>>> GetIncomeFromEachFilial()//works
+        {
+            var result = await _reportRepository.GetIncomeFromEachFilial();
+            if (result.IsOkay)
+            {
+                if (result.RequestData == null) { return Problem($"Sorry, there is no information about income from each filial.", statusCode: 520); }
+                return Ok(_mapper.Map<List<FilialWithIncomeOutputModel>>(result.RequestData));
+            }
+            return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
+        }
 
-        //[HttpGet("income/of-filial-during-period")]
-        //public decimal GetIncomeOfFilialDuringPeriod(string startDate, string finishDate, string name)
-        //{
-        //    return 10000000;
-        //}
+        [HttpGet("income/of-filials-during-period")]
+        public async ValueTask<ActionResult<List<FilialWithIncomeOutputModel>>> GetTotalFilialSumPerPeriod(PeriodInputModel inputModel)//works
+        {
+            var result = await _reportRepository.GetTotalFilialSumPerPeriod(_mapper.Map<Period>(inputModel));
+            if (result.IsOkay)
+            {
+                if (result.RequestData == null) { return Problem($"Sorry, there is no information about total filial sum per period.", statusCode: 520); }
+                return Ok(_mapper.Map<List<FilialWithIncomeOutputModel>>(result.RequestData));
+            }
+            return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
+        }
     }
 }
