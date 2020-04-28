@@ -14,6 +14,9 @@ namespace ElectronicsStore.API.Configuration
             builder.RegisterType<ReportController>().As<IReportController>();
             builder.RegisterType<StorageOptions>().As<IStorageOptions>();
             builder.RegisterType<ReportRepository>().As<IReportRepository>();
+            builder.RegisterType<ProductStorage>().As<IProductStorage>();
+            builder.RegisterType<ProductController>().As<IProductController>();
+            builder.RegisterType<ProductRepository>().As<IProductRepository>();
         }
     }
 }

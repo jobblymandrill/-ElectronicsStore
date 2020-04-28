@@ -53,7 +53,9 @@ namespace ElecronicsStore.DB.Storages
 
         public async ValueTask<List<Product>> GetNeverOrderedProducts()//works
         {
-            var result = await _connection.QueryAsync<Product, Category, Category, Product>(
+            try
+            {
+                var result = await _connection.QueryAsync<Product, Category, Category, Product>(
                             SpName.GetNeverOrderedProducts,
                             (product, category, parentCategory) =>
                             {
@@ -68,12 +70,19 @@ namespace ElecronicsStore.DB.Storages
                             transaction: _transaction,
                             commandType: CommandType.StoredProcedure,
                             splitOn: "Id, Id, Id");
-            return result.ToList();
+                return result.ToList();
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
         }
 
         public async ValueTask<List<CategoryWithNumber>> GetCategoriesWithACertainProductNumber(int number)//works
         {
-            var result = await _connection.QueryAsync<CategoryWithNumber, Category, Category, CategoryWithNumber>(
+            try
+            {
+                var result = await _connection.QueryAsync<CategoryWithNumber, Category, Category, CategoryWithNumber>(
                             SpName.ShowCategoriesWhereProductNumberIsMoreThanSomeNumber,
                             (categoryWithNumber, category, parentCategory) =>
                             {
@@ -88,12 +97,19 @@ namespace ElecronicsStore.DB.Storages
                             transaction: _transaction,
                             commandType: CommandType.StoredProcedure,
                             splitOn: "Id, Id");
-            return result.ToList();
+                return result.ToList();
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
         }
 
         public async ValueTask<List<Product>> GetProductsFromWareHouseNotPresentInMscAndSpb()
         {
-            var result = await _connection.QueryAsync<Product, Category, Category, Product>(
+            try
+            {
+                var result = await _connection.QueryAsync<Product, Category, Category, Product>(
                             SpName.GetProductsFromWareHouseNotPresentInMscAndSpb,
                             (product, category, parentCategory) =>
                             {
@@ -108,12 +124,19 @@ namespace ElecronicsStore.DB.Storages
                             transaction: _transaction,
                             commandType: CommandType.StoredProcedure,
                             splitOn: "Id, Id, Id");
-            return result.ToList();
+                return result.ToList();
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
         }
 
         public async ValueTask<List<Product>> GetRanOutProducts()
         {
-            var result = await _connection.QueryAsync<Product, Category, Category, Product>(
+            try
+            {
+                var result = await _connection.QueryAsync<Product, Category, Category, Product>(
                             SpName.GetRanOutProducts,
                             (product, category, parentCategory) =>
                             {
@@ -128,12 +151,19 @@ namespace ElecronicsStore.DB.Storages
                             transaction: _transaction,
                             commandType: CommandType.StoredProcedure,
                             splitOn: "Id, Id, Id");
-            return result.ToList();
+                return result.ToList();
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
         }
 
         public async ValueTask<List<ProductWithCity>> GetMostPopularProductInEachCity()
         {
-            var result = await _connection.QueryAsync<ProductWithCity, Product, Category, Category, ProductWithCity>(
+            try
+            {
+                var result = await _connection.QueryAsync<ProductWithCity, Product, Category, Category, ProductWithCity>(
                             SpName.GetMostPopularProductInEachCity,
                             (productWithCity, product, category, parentCategory) =>
                             {
@@ -150,42 +180,68 @@ namespace ElecronicsStore.DB.Storages
                             transaction: _transaction,
                             commandType: CommandType.StoredProcedure,
                             splitOn: "Id, Id, Id");
-            return result.ToList();
+                return result.ToList();
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
         }
 
         public async ValueTask<List<FilialWithIncome>> GetTotalFilialSumPerPeriod(Period dataModel)
         {
-            DynamicParameters periodModelParams = new DynamicParameters(new
+            try
             {
-                dataModel.Start,
-                dataModel.End,
-            });
-            var result = await _connection.QueryAsync<FilialWithIncome>(
-                            SpName.GetTotalFilialSumPerPeriod,
-                            periodModelParams,
-                            transaction: _transaction,
-                            commandType: CommandType.StoredProcedure);
-            return result.ToList();
+                DynamicParameters periodModelParams = new DynamicParameters(new
+                {
+                    dataModel.Start,
+                    dataModel.End,
+                });
+                var result = await _connection.QueryAsync<FilialWithIncome>(
+                                SpName.GetTotalFilialSumPerPeriod,
+                                periodModelParams,
+                                transaction: _transaction,
+                                commandType: CommandType.StoredProcedure);
+                return result.ToList();
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
         }
 
         public async ValueTask<IncomeByIsForeignCriteria> GetIncomeFromRussiaAndFromForeignCountries()
         {
-            var result = await _connection.QueryAsync<IncomeByIsForeignCriteria>(
+            try
+            {
+                var result = await _connection.QueryAsync<IncomeByIsForeignCriteria>(
                            SpName.GetIncomeFromRussiaAndFromForeignCountries,
                            null,
                            transaction: _transaction,
                            commandType: CommandType.StoredProcedure);
-            return result.FirstOrDefault();
+                return result.FirstOrDefault();
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
         }
 
         public async ValueTask<List<FilialWithIncome>> GetIncomeFromEachFilial()
         {
-            var result = await _connection.QueryAsync<FilialWithIncome>(
+            try
+            {
+                var result = await _connection.QueryAsync<FilialWithIncome>(
                            SpName.GetIncomeFromEachFilial,
                            null,
                            transaction: _transaction,
                            commandType: CommandType.StoredProcedure);
-            return result.ToList();
+                return result.ToList();
+            }
+            catch (SqlException ex)
+            {
+                throw ex;
+            }
         }
     }
 }
