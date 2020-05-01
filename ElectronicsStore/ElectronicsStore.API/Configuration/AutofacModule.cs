@@ -12,11 +12,17 @@ namespace ElectronicsStore.API.Configuration
         {
             builder.RegisterType<ReportStorage>().As<IReportStorage>();
             builder.RegisterType<ReportController>().As<IReportController>();
-            builder.RegisterType<StorageOptions>().As<IStorageOptions>();
             builder.RegisterType<ReportRepository>().As<IReportRepository>();
+
             builder.RegisterType<ProductStorage>().As<IProductStorage>();
             builder.RegisterType<ProductController>().As<IProductController>();
             builder.RegisterType<ProductRepository>().As<IProductRepository>();
+
+            builder.RegisterType<OrderStorage>().As<IOrderStorage>();
+            builder.RegisterType<OrderController>().As<IOrderController>();
+            builder.RegisterType<OrderRepository>().As<IOrderRepository>();
+
+            builder.RegisterType<StorageOptions>().As<IStorageOptions>();
         }
     }
 }

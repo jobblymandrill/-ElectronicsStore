@@ -47,6 +47,17 @@ namespace ElectronicsStore.API.Configuration
                     ParentCategory =
                 new Category { Id = src.Category.ParentCategory.Id, Name = src.Category.ParentCategory.Name }
                 }));
+
+            CreateMap<OrderInputModel, Order>()
+                .ForMember(dest => dest.DateTime, opt => opt.MapFrom(src => DateTime.ParseExact(src.DateTime, "dd.mm.yyyy", CultureInfo.InvariantCulture)))
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Filial, opt => opt.MapFrom(src => new Filial
+                {
+                    Id = src.FilialId,
+                    Name = null,
+                    CountryName = null,
+                    IsForeign = null
+                }));
         }
     }
 }
