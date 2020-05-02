@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using ElecronicsStore.API;
+using ElecronicsStore.Core;
 using ElecronicsStore.DB.Storages;
 using ElectronicsStore.API.Controllers;
 using ElectronicsStore.Core.ConfigurationOptions;
@@ -23,6 +25,9 @@ namespace ElectronicsStore.API.Configuration
             builder.RegisterType<OrderRepository>().As<IOrderRepository>();
 
             builder.RegisterType<StorageOptions>().As<IStorageOptions>();
+            builder.RegisterType<UrlOptions>().As<IUrlOptions>();
+
+            builder.RegisterType<CurrencyConverter>().As<ElecronicsStore.Core.ICurrencyConverter>();
         }
     }
 }

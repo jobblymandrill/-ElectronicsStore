@@ -13,6 +13,8 @@ namespace ElectronicsStore.API.Configuration
         {
             CreateMap<ProductInputModel, Product>();
 
+
+
             CreateMap<Product, ProductOutputModel>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => new Category
                 {
@@ -24,20 +26,34 @@ namespace ElectronicsStore.API.Configuration
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
                 .ForMember(dest => dest.TradeMark, opt => opt.MapFrom(src => src.TradeMark));
 
+
+
             CreateMap<Category, CategoryOutputModel>()
             .ForMember(dest => dest.ParentCategoryName, opt => opt.MapFrom(src => src.ParentCategory.Name));
 
+
+
             CreateMap<CategoryWithNumber, CategoryWithNumberOutputModel>();
 
+
+
             CreateMap<ProductWithCity, ProductWithCityOutputModel>();
+
+
 
             CreateMap<PeriodInputModel, Period>()
                 .ForMember(dest => dest.Start, opt => opt.MapFrom(src => DateTime.ParseExact(src.StartDate, "dd.mm.yyyy", CultureInfo.InvariantCulture)))
                 .ForMember(dest => dest.End, opt => opt.MapFrom(src => DateTime.ParseExact(src.EndDate, "dd.mm.yyyy", CultureInfo.InvariantCulture)));
 
+
+
             CreateMap<FilialWithIncome, FilialWithIncomeOutputModel>();
 
+
+
             CreateMap<IncomeByIsForeignCriteria, IncomeByIsForeignCriteriaOutputModel>();
+
+
 
             CreateMap<ProductSearchInputModel, ProductSearch>()
                 .ForMember(dest => dest.Category, opt => opt.MapFrom(src => new Category
@@ -48,15 +64,30 @@ namespace ElectronicsStore.API.Configuration
                 new Category { Id = src.Category.ParentCategory.Id, Name = src.Category.ParentCategory.Name }
                 }));
 
+
+
             CreateMap<OrderInputModel, Order>()
                 .ForMember(dest => dest.DateTime, opt => opt.MapFrom(src => DateTime.ParseExact(src.DateTime, "dd.mm.yyyy", CultureInfo.InvariantCulture)))
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dest => dest.Filial, opt => opt.MapFrom(src => new Filial
+                .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
+            CreateMap<Order, OrderOutputModel>()
+                .ForMember(dest => dest.DateTime, opt => opt.MapFrom(src => src.DateTime.ToString()))
+                .ForMember(dest => dest.Products, opt => opt.MapFrom(src => src.Products));
+
+
+
+            CreateMap<Order_Product_AmountInputModel, Order_Product_Amount>()
+                .ForMember(dest => dest.Product, opt => opt.MapFrom(src => new ProductShortModel
                 {
-                    Id = src.FilialId,
+                    Id = (long)src.Product.Id,
                     Name = null,
-                    CountryName = null,
-                    IsForeign = null
+                    Price = src.Product.Price
+                }));
+
+            CreateMap<Order_Product_Amount, Order_Product_AmountOutputModel>()
+                .ForMember(dest => dest.Product, opt => opt.MapFrom(src => new ProductShortOutputModel
+                {
+                    Name = src.Product.Name,
+                    Price = src.Product.Price
                 }));
         }
     }

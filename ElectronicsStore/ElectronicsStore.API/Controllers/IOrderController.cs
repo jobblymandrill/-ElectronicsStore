@@ -7,6 +7,6 @@ namespace ElectronicsStore.API.Controllers
 {
     public interface IOrderController
     {
-        ValueTask<ActionResult<long>> AddOrUpdateOrder(OrderInputModel inputModel);
+        ValueTask<ActionResult<OrderOutputModel>> AddOrUpdateOrder(OrderInputModel inputModel);
     }
 }

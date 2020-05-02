@@ -51,7 +51,7 @@ namespace ElecronicsStore.DB.Storages
             public const string GetIncomeFromEachFilial = "MoneyByFilial";
         }
 
-        public async ValueTask<List<Product>> GetNeverOrderedProducts()//works
+        public async ValueTask<List<Product>> GetNeverOrderedProducts()
         {
             try
             {
@@ -78,7 +78,7 @@ namespace ElecronicsStore.DB.Storages
             }
         }
 
-        public async ValueTask<List<CategoryWithNumber>> GetCategoriesWithACertainProductNumber(int number)//works
+        public async ValueTask<List<CategoryWithNumber>> GetCategoriesWithACertainProductNumber(int number)
         {
             try
             {
@@ -163,23 +163,11 @@ namespace ElecronicsStore.DB.Storages
         {
             try
             {
-                var result = await _connection.QueryAsync<ProductWithCity, Product, Category, Category, ProductWithCity>(
+                var result = await _connection.QueryAsync<ProductWithCity>(
                             SpName.GetMostPopularProductInEachCity,
-                            (productWithCity, product, category, parentCategory) =>
-                            {
-                                ProductWithCity newProductWithCity = productWithCity;
-                                Product newProduct = product;
-                                Category newCategory = category;
-                                Category newParentCategory = parentCategory;
-                                newCategory.ParentCategory = newParentCategory;
-                                newProduct.Category = newCategory;
-                                newProductWithCity.Product = newProduct;
-                                return newProductWithCity;
-                            },
                             null,
                             transaction: _transaction,
-                            commandType: CommandType.StoredProcedure,
-                            splitOn: "Id, Id, Id");
+                            commandType: CommandType.StoredProcedure);
                 return result.ToList();
             }
             catch (SqlException ex)

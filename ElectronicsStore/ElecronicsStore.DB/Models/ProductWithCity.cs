@@ -2,7 +2,7 @@
 {
     public class ProductWithCity
     {
-        public Product Product { get; set; }
-        public string CityName { get; set;  }
+        public string City { get; set;  }
+        public string Product { get; set; }
     }
 }

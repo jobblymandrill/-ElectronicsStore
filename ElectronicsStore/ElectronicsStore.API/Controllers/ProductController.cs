@@ -22,7 +22,7 @@ namespace ElectronicsStore.API.Controllers
         }
 
         [HttpGet("search")]
-        public async ValueTask<ActionResult<List<ProductOutputModel>>> SearchProduct(ProductSearchInputModel inputModel)//works
+        public async ValueTask<ActionResult<List<ProductOutputModel>>> SearchProduct(ProductSearchInputModel inputModel)
         {
             var result = await _productRepository.SearchProduct(_mapper.Map<ProductSearch>(inputModel));
             if (result.IsOkay)

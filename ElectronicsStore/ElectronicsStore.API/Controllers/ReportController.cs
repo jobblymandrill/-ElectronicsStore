@@ -21,7 +21,7 @@ namespace ElectronicsStore.API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("category/with-more-than-{number}-products")]//works but sql procedure need to be refactored
+        [HttpGet("category/with-more-than-{number}-products")]
         public async ValueTask<ActionResult<List<CategoryWithNumberOutputModel>>> GetCategoriesWithACertainProductNumber(int number)
         {
             var result = await _reportRepository.GetCategoriesWithACertainProductNumber(number);
@@ -37,7 +37,7 @@ namespace ElectronicsStore.API.Controllers
         }
 
         [HttpGet("product/from-warehouse-not-present-in-msc-and-spb")]
-        public async ValueTask<ActionResult<List<ProductOutputModel>>> GetProductsFromWareHouseNotPresentInMscAndSpb()//works
+        public async ValueTask<ActionResult<List<ProductOutputModel>>> GetProductsFromWareHouseNotPresentInMscAndSpb()
         {
             var result = await _reportRepository.GetProductsFromWareHouseNotPresentInMscAndSpb();
             if (result.IsOkay)
@@ -52,7 +52,7 @@ namespace ElectronicsStore.API.Controllers
         }
 
         [HttpGet("product/finished")]
-        public async ValueTask<ActionResult<List<ProductOutputModel>>> GetRanOutProducts()//works
+        public async ValueTask<ActionResult<List<ProductOutputModel>>> GetRanOutProducts()
         {
             var result = await _reportRepository.GetRanOutProducts();
             if (result.IsOkay)
@@ -67,7 +67,7 @@ namespace ElectronicsStore.API.Controllers
         }
 
         [HttpGet("product/most-popular-in-each-city")]
-        public async ValueTask<ActionResult<List<ProductWithCityOutputModel>>> GetMostPopularProductInEachCity()//doesnt work, i dont know how to modify sql proc
+        public async ValueTask<ActionResult<List<ProductWithCityOutputModel>>> GetMostPopularProductInEachCity()
         {
             var result = await _reportRepository.GetMostPopularProductInEachCity();
             if (result.IsOkay)
@@ -81,7 +81,7 @@ namespace ElectronicsStore.API.Controllers
             return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
         }
 
-        [HttpGet("product/never-ordered")]//works
+        [HttpGet("product/never-ordered")]
         public async ValueTask<ActionResult<List<ProductOutputModel>>> GetNeverOrderedProducts()
         {
             var result = await _reportRepository.GetNeverOrderedProducts();
@@ -94,7 +94,7 @@ namespace ElectronicsStore.API.Controllers
         }
 
         [HttpGet("income/from-russia-and-foreign-countries")]
-        public async ValueTask<ActionResult<IncomeByIsForeignCriteriaOutputModel>> GetIncomeFromRussiaAndFromForeignCountries()//works
+        public async ValueTask<ActionResult<IncomeByIsForeignCriteriaOutputModel>> GetIncomeFromRussiaAndFromForeignCountries()
         {
             var result = await _reportRepository.GetIncomeFromRussiaAndFromForeignCountries();
             if (result.IsOkay)
@@ -106,7 +106,7 @@ namespace ElectronicsStore.API.Controllers
         }
 
         [HttpGet("income/from-each-filial")]
-        public async ValueTask<ActionResult<List<FilialWithIncomeOutputModel>>> GetIncomeFromEachFilial()//works
+        public async ValueTask<ActionResult<List<FilialWithIncomeOutputModel>>> GetIncomeFromEachFilial()
         {
             var result = await _reportRepository.GetIncomeFromEachFilial();
             if (result.IsOkay)
@@ -118,7 +118,7 @@ namespace ElectronicsStore.API.Controllers
         }
 
         [HttpGet("income/of-filials-during-period")]
-        public async ValueTask<ActionResult<List<FilialWithIncomeOutputModel>>> GetTotalFilialSumPerPeriod(PeriodInputModel inputModel)//works
+        public async ValueTask<ActionResult<List<FilialWithIncomeOutputModel>>> GetTotalFilialSumPerPeriod(PeriodInputModel inputModel)
         {
             var result = await _reportRepository.GetTotalFilialSumPerPeriod(_mapper.Map<Period>(inputModel));
             if (result.IsOkay)

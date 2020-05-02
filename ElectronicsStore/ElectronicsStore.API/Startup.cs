@@ -58,6 +58,8 @@ namespace ElectronicsStore.API
 
             services.Configure<StorageOptions>(Configuration);
 
+            services.Configure<UrlOptions>(Configuration);
+
             // Auto Mapper Configurations
             var mappingConfig = new MapperConfiguration(mc =>
             {
