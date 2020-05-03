@@ -1,0 +1,11 @@
+﻿create proc [dbo].[Order_GetById]
+									@id bigint
+as
+begin
+	select
+		o.Id,
+		o.DateTime,
+		o.FilialId
+	from dbo.[Order] o
+	where o.Id = @id
+end

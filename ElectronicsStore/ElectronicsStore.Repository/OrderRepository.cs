@@ -1,5 +1,4 @@
-﻿
-using ElecronicsStore.Core;
+﻿using ElecronicsStore.Core;
 using ElecronicsStore.DB.Models;
 using ElecronicsStore.DB.Storages;
 using ElectronicsStore.Core;

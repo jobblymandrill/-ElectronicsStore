@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using ElecronicsStore.API;
 using ElecronicsStore.DB.Models;
 using ElectronicsStore.API.Models.InputModels;
 using ElectronicsStore.API.Models.OutputModels;
-using ElectronicsStore.Core.ConfigurationOptions;
 using ElectronicsStore.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
