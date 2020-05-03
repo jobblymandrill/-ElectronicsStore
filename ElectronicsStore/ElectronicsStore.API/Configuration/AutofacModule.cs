@@ -24,7 +24,7 @@ namespace ElectronicsStore.API.Configuration
             builder.RegisterType<StorageOptions>().As<IStorageOptions>();
             builder.RegisterType<UrlOptions>().As<IUrlOptions>();
 
-            builder.RegisterType<CurrencyConverter>().As<ElecronicsStore.Core.ICurrencyConverter>();
+            builder.RegisterType<CurrencyConverter>().As<ICurrencyConverter>();
         }
     }
 }
