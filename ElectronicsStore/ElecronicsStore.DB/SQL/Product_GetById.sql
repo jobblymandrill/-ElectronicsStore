@@ -1,4 +1,6 @@
-﻿create proc [dbo].[Product_GetById]
+﻿drop proc if exists dbo.Product_GetById
+go
+create proc [dbo].[Product_GetById]
 									@id bigint
 as
 begin
