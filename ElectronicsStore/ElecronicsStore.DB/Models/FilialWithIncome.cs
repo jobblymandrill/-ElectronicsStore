@@ -1,5 +1,4 @@
-﻿
-namespace ElecronicsStore.DB.Models
+﻿namespace ElecronicsStore.DB.Models
 {
     public class FilialWithIncome
     {

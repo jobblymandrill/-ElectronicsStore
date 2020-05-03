@@ -8,7 +8,7 @@ namespace ElecronicsStore.DB.Storages
         void TransactionCommit();
         void TransactionStart();
         void TransactioRollBack();
-        ValueTask<Order> AddOrUpdateOrder(Order dataModel);
+        ValueTask<Order> AddOrder(Order dataModel);
         ValueTask<Order> GetOrderById(long id);
     }
 }

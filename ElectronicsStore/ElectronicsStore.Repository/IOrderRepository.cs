@@ -5,6 +5,6 @@ namespace ElectronicsStore.Repository
 {
     public interface IOrderRepository
     {
-        ValueTask<RequestResult<Order>> AddOrUpdateOrder(Order dataModel);
+        ValueTask<RequestResult<Order>> AddOrder(Order dataModel);
     }
 }

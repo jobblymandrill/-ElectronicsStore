@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using ElecronicsStore.API;
 using ElecronicsStore.Core;
 using ElecronicsStore.DB.Storages;
 using ElectronicsStore.API.Controllers;

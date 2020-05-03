@@ -41,14 +41,14 @@ namespace ElecronicsStore.DB.Storages
 
         internal static class SpName
         {
-            public const string GetNeverOrderedProducts = "ProductsNeverOrdered";
+            public const string GetNeverOrderedProducts = "GetNeverOrderedProducts";
             public const string ShowCategoriesWhereProductNumberIsMoreThanSomeNumber = "ShowCategoriesWhereProductNumberIsMoreThanSomeNumber";
-            public const string GetProductsFromWareHouseNotPresentInMscAndSpb = "FindProductsOnTheLagetButNotInMSCAndSpb";
-            public const string GetRanOutProducts = "FindProductsSoldButNotPresent";
-            public const string GetMostPopularProductInEachCity = "FindTheMostPopularProductInEachCity";
-            public const string GetTotalFilialSumPerPeriod = "TotalFilialSumPerPeriod";
-            public const string GetIncomeFromRussiaAndFromForeignCountries = "FindOutcomeFromRussiaAndFromNotRussia";
-            public const string GetIncomeFromEachFilial = "MoneyByFilial";
+            public const string GetProductsFromWareHouseNotPresentInMscAndSpb = "GetProductsFromWareHouseNotPresentInMscAndSpb";
+            public const string GetRanOutProducts = "GetRanOutProducts";
+            public const string GetMostPopularProductInEachCity = "GetMostPopularProductInEachCity";
+            public const string GetTotalFilialSumPerPeriod = "GetTotalFilialSumPerPeriod";
+            public const string GetIncomeFromRussiaAndFromForeignCountries = "GetIncomeFromRussiaAndFromForeignCountries";
+            public const string GetIncomeFromEachFilial = "GetIncomeFromEachFilial";
         }
 
         public async ValueTask<List<Product>> GetNeverOrderedProducts()

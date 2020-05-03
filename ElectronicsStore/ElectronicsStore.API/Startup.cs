@@ -19,12 +19,9 @@ namespace ElectronicsStore.API
             builder.AddJsonFile("config.json", false, true);
             if (env.IsDevelopment())
                 builder.AddJsonFile("config.development.json", false, true);
-
             Configuration = builder.Build();
         }
-
         public IConfiguration Configuration { get; }
-
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -45,13 +42,10 @@ namespace ElectronicsStore.API
                 endpoints.MapControllers();
             });
         }
-
         public void ConfigureContainer(ContainerBuilder builder)
         {
             builder.RegisterModule(new AutofacModule());
         }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -60,7 +54,6 @@ namespace ElectronicsStore.API
 
             services.Configure<UrlOptions>(Configuration);
 
-            // Auto Mapper Configurations
             var mappingConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new AutomapperProfile());

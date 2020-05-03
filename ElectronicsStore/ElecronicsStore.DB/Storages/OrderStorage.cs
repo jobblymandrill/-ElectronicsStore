@@ -1,5 +1,4 @@
-﻿
-using Dapper;
+﻿using Dapper;
 using ElecronicsStore.DB.Models;
 using ElectronicsStore.Core.ConfigurationOptions;
 using Microsoft.Extensions.Options;
@@ -16,9 +15,12 @@ namespace ElecronicsStore.DB.Storages
 
         private IDbTransaction _transaction;
 
-        public OrderStorage(IOptions<StorageOptions> storageOptions)
+        private IProductStorage _productStorage;
+
+        public OrderStorage(IOptions<StorageOptions> storageOptions, IProductStorage productStorage)
         {
             _connection = new SqlConnection(storageOptions.Value.DBConnectionString);
+            _productStorage = productStorage;
         }
 
         public void TransactionStart()
@@ -41,43 +43,29 @@ namespace ElecronicsStore.DB.Storages
 
         internal static class SpName
         {
-            public const string OrderMerge = "Order_Merge";
-            public const string MergeOrderProductAmount = "Order_Product_Amount_Merge";
+            public const string OrderAdd = "Order_Add";
             public const string GetOrderById = "Order_GetById";
             public const string GetProductById = "Product_GetById";
+            public const string OrderProductAmountAdd = "Order_Product_Amount_Add";
         }
 
-        public async ValueTask<Order> AddOrUpdateOrder(Order dataModel)
+        public async ValueTask<Order> AddOrder(Order dataModel)
         {
-            if(dataModel.Id == null) { dataModel.Id = -1; }
             try
             {
                 DynamicParameters dataModelParams = new DynamicParameters(new
                 {
-                    dataModel.Id,
-                    dataModel.DateTime,
                     dataModel.FilialId,
                     dataModel.FilialCity
                 });
-                if (dataModel.Id == -1)
-                {
-                   var result = await _connection.QueryAsync<long>(
-                        SpName.OrderMerge,
-                        dataModelParams,
-                        transaction: _transaction,
-                        commandType: CommandType.StoredProcedure);
-                    dataModel.Id = (long)result.FirstOrDefault();
-                    dataModel.DateTime = GetOrderById((long)dataModel.Id).Result.DateTime;
-                    await FillProducts(dataModel);
-                }
-                else
-                {
-                    await _connection.QueryAsync(
-                        SpName.OrderMerge,
-                        dataModelParams,
-                        transaction: _transaction,
-                        commandType: CommandType.StoredProcedure);
-                }
+                var result = await _connection.QueryAsync<long>(
+                       SpName.OrderAdd,
+                       dataModelParams,
+                       transaction: _transaction,
+                       commandType: CommandType.StoredProcedure);
+                dataModel.Id = result.FirstOrDefault();
+                dataModel.DateTime = GetOrderById((long)dataModel.Id).Result.DateTime;
+                await FillProducts(dataModel);
                 return dataModel;
             }
             catch (SqlException ex)
@@ -91,24 +79,22 @@ namespace ElecronicsStore.DB.Storages
             foreach (var item in dataModel.Products)
             {
                 long productId = item.Product.Id;
-                if(item.OrderId == null) { item.OrderId = dataModel.Id; }
+                item.OrderId = dataModel.Id; 
                 try
                 {
                     DynamicParameters itemParams = new DynamicParameters(new
                     {
-                        item.Id,
                         productId,
                         item.OrderId,
                         item.Amount
                     });
-
                     var result = await _connection.QueryAsync<int>(
-                        SpName.MergeOrderProductAmount,
+                        SpName.OrderProductAmountAdd,
                         itemParams,
                         transaction: _transaction,
                         commandType: CommandType.StoredProcedure);
                     item.Id = result.FirstOrDefault();
-                    item.Product.Name = GetProductById(item.Product.Id).Result.Name;
+                    item.Product.Name = _productStorage.GetProductById(item.Product.Id).Result.Name;
                 }
                 catch (SqlException ex)
                 {
@@ -127,27 +113,6 @@ namespace ElecronicsStore.DB.Storages
                 });
                 var result = await _connection.QueryAsync<Order>(
                         SpName.GetOrderById,
-                        param,
-                        transaction: _transaction,
-                        commandType: CommandType.StoredProcedure);
-                return result.FirstOrDefault();
-            }
-            catch (SqlException ex)
-            {
-                throw ex;
-            }
-        }
-
-        public async ValueTask<Product> GetProductById (long id)
-        {
-            try
-            {
-                DynamicParameters param = new DynamicParameters(new
-                {
-                    id
-                });
-                var result = await _connection.QueryAsync<Product>(
-                        SpName.GetProductById,
                         param,
                         transaction: _transaction,
                         commandType: CommandType.StoredProcedure);

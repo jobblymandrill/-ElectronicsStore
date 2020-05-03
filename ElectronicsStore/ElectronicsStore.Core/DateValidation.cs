@@ -1,0 +1,19 @@
+﻿using System;
+using System.Globalization;
+
+namespace ElectronicsStore.Core
+{
+    public static class DateValidation
+    {
+        public static bool IsValidDate(string value)
+        {
+            var dateFormat = "dd.MM.yyyy";
+            DateTime tempDate;
+            bool validDate = DateTime.TryParseExact(value, dateFormat, DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None, out tempDate);
+            if (validDate)
+                return true;
+            else
+                return false;
+        }
+    }
+}

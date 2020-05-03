@@ -2,6 +2,7 @@
 using ElecronicsStore.DB.Models;
 using ElectronicsStore.API.Models.InputModels;
 using ElectronicsStore.API.Models.OutputModels;
+using ElectronicsStore.Core;
 using ElectronicsStore.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace ElectronicsStore.API.Controllers
         [HttpGet("category/with-more-than-{number}-products")]
         public async ValueTask<ActionResult<List<CategoryWithNumberOutputModel>>> GetCategoriesWithACertainProductNumber(int number)
         {
+            if (number < 1) { return BadRequest("Incorrect number"); }
             var result = await _reportRepository.GetCategoriesWithACertainProductNumber(number);
             if (result.IsOkay)
             {
@@ -120,6 +122,8 @@ namespace ElectronicsStore.API.Controllers
         [HttpGet("income/of-filials-during-period")]
         public async ValueTask<ActionResult<List<FilialWithIncomeOutputModel>>> GetTotalFilialSumPerPeriod(PeriodInputModel inputModel)
         {
+            if (!DateValidation.IsValidDate(inputModel.StartDate)) { return BadRequest("StartDate should be in dd.MM.yyyy format."); }
+            if (!DateValidation.IsValidDate(inputModel.EndDate)) { return BadRequest("EndDate should be in dd.mm.yyyy format."); }
             var result = await _reportRepository.GetTotalFilialSumPerPeriod(_mapper.Map<Period>(inputModel));
             if (result.IsOkay)
             {

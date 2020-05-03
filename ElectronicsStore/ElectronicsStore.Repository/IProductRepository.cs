@@ -1,11 +1,7 @@
-﻿using ElecronicsStore.DB.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace ElectronicsStore.Repository
+﻿namespace ElectronicsStore.Repository
 {
     public interface IProductRepository
     {
-        ValueTask<RequestResult<List<Product>>> SearchProduct(ProductSearch dataModel);
+        void AddOneMillionProducts();
     }
 }

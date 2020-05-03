@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace ElecronicsStore.DB.Models
 {
     public class Period

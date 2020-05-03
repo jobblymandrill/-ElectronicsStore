@@ -6,7 +6,6 @@ using ElectronicsStore.API.Models.OutputModels;
 using ElectronicsStore.Core.ConfigurationOptions;
 using ElectronicsStore.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 
 namespace ElectronicsStore.API.Controllers
@@ -17,30 +16,23 @@ namespace ElectronicsStore.API.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IOrderRepository _orderRepository;
-        private readonly IOptions<UrlOptions> _urlOptions;
-        public OrderController(IOrderRepository orderRepository, IMapper mapper, IOptions<UrlOptions> urlOptions)
+        public OrderController(IOrderRepository orderRepository, IMapper mapper)
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
-            _urlOptions = urlOptions;
         }
 
         [HttpPost]
-        public async ValueTask<ActionResult<OrderOutputModel>> AddOrUpdateOrder(OrderInputModel inputModel)//add works, update doesnt
+        public async ValueTask<ActionResult<OrderOutputModel>> AddOrder(OrderInputModel inputModel)
         {
-            var result = await _orderRepository.AddOrUpdateOrder(_mapper.Map<Order>(inputModel));
+            if (inputModel == null) { return BadRequest("No data to insert"); }
+            var result = await _orderRepository.AddOrder(_mapper.Map<Order>(inputModel));
             if (result.IsOkay)
             {
-                if (result.RequestData == null) { return NotFound("Operation wasnt executed"); }
+                if (result.RequestData == null) { return NotFound("Operation wasn't executed"); }
                 return Ok(_mapper.Map<OrderOutputModel>(result.RequestData));
             }
             return Problem($"Transaction failed {result.ExMessage}", statusCode: 520);
         }
-
-        //[HttpGet("search")]
-        //public OrderOutputModel SearchOrder(OrderInputModel inputModel)
-        //{
-        //    return new OrderOutputModel();
-        //}
     }
 }

@@ -20,14 +20,14 @@ namespace ElectronicsStore.Repository
             _currencyConverter = currencyConverter;
         }
 
-        public async ValueTask<RequestResult<Order>> AddOrUpdateOrder(Order dataModel)
+        public async ValueTask<RequestResult<Order>> AddOrder(Order dataModel)
         {
             if (!Russia.Cities.Contains(dataModel.FilialCity)) { await ConvertPrices(dataModel); }
             var result = new RequestResult<Order>();
             try
             {
                 _orderStorage.TransactionStart();
-                result.RequestData = await _orderStorage.AddOrUpdateOrder(dataModel);
+                result.RequestData = await _orderStorage.AddOrder(dataModel);
                 _orderStorage.TransactionCommit();
                 result.IsOkay = true;
             }

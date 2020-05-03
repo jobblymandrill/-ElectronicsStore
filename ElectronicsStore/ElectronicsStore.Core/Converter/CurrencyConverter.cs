@@ -12,12 +12,10 @@ namespace ElecronicsStore.Core
     public class CurrencyConverter : ICurrencyConverter
     {
         private string _urlOptions;
-
         public CurrencyConverter(IOptions<UrlOptions> urlOptions)
         {
             _urlOptions = urlOptions.Value.CurrenciesApiUrl;
         }
-
         public async ValueTask<decimal> GetCurrentExchangeRate(CurrencyTypeEnum type)
         {
             WebRequest request = WebRequest.CreateHttp(_urlOptions);
