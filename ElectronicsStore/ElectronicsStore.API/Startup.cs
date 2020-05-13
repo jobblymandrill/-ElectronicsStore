@@ -1,17 +1,12 @@
 ﻿using Autofac;
 using AutoMapper;
 using ElectronicsStore.API.Configuration;
-using ElectronicsStore.API.RabbitMQ;
 using ElectronicsStore.Core.ConfigurationOptions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
-using System;
-using System.Text;
 
 namespace ElectronicsStore.API
 {
